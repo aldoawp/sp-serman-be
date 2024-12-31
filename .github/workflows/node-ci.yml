@@ -1,32 +1,28 @@
-name: NodeJS CI Workflow
+name: Node CI Workflow
+run-name: ${{ github.actor }} start the CI workflow
 on:
-  pull_request: 
-    branches:
+  pull_request:
+    branches: 
       - main
 jobs:
-  Downloading-Dependency:
+  build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x, 22.x]
     steps:
-      - name: Downloading dependency
-        run: echo downloading package...
-      - name: Installing dependency
-        run: echo installing package...
-      - name: Successful
-        run: echo all package installed successfuly!
-  Build-App:
-    needs: Downloading-Dependency
-    runs-on: ubuntu-latest
-    steps:
-      - name: Run unit testing
-        run: echo unit test tested!
-      - name: Linting code
-        run: echo running lint && lint --fix
-  Test-App:
-    needs: Build-App
-    runs-on: ubuntu-latest
-    steps:
-      - name: Run unit test
-        run: echo unit test passed!
-      - name: Run integration test
-        run: echo integration test passed!  
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Use Node.js version ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+      - name: Install dependencies
+        run: npm ci
+      - name: Compile TS file to JS file
+        run: npm run build --if-present
+      - name: Test the app
+        run: npm test
+      
 
