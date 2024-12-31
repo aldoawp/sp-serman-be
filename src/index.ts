@@ -10,6 +10,12 @@ app.get('/', (req, res) => {
     })
     .then((data) => {
       res.send(data);
+      console.log(
+        'Data successfuly sent with status: ' +
+          res.statusCode +
+          ' ' +
+          res.statusMessage
+      );
     })
     .catch((error) => {
       console.log('Error: ', error);
