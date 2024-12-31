@@ -4,8 +4,18 @@ const app = express();
 const port = 3000;
 
 app.get('/', (req, res) => {
+  fetch('https://fake-json-api.mock.beeceptor.com/users')
+    .then((response) => {
+      return response.json();
+    })
+    .then((data) => {
+      res.send(data);
+    })
+    .catch((error) => {
+      console.log('Error: ', error);
+      res.status(500).send('Internal server error');
+    });
   req;
-  res.send('Test');
 });
 
 app.listen(port, () => {

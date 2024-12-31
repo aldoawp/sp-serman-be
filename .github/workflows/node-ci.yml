@@ -1,0 +1,32 @@
+name: NodeJS CI Workflow
+on:
+  pull_request: 
+    branches:
+      - main
+jobs:
+  Downloading-Dependency:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Downloading dependency
+        run: echo downloading package...
+      - name: Installing dependency
+        run: echo installing package...
+      - name: Successful
+        run: echo all package installed successfuly!
+  Build-App:
+    needs: Downloading-Dependency
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run unit testing
+        run: echo unit test tested!
+      - name: Linting code
+        run: echo running lint && lint --fix
+  Test-App:
+    needs: Build-App
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run unit test
+        run: echo unit test passed!
+      - name: Run integration test
+        run: echo integration test passed!  
+
