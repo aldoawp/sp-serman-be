@@ -1,35 +1,32 @@
 import { Request, Response } from 'express';
-import { ItemTypeModel } from '../models/itemTypeModel';
-import { itemTypes } from '../services/itemTypeService';
-const { validationResult } = require('express-validator');
+import { create, read } from '../services/itemTypeService';
+import { CreateItemTypeDTO } from '../dtos/itemType/CreateItemTypeDTO';
+import { itemTypeSchema } from '../utils/validations/itemTypeValidation';
 
-export const getAllItemType = (req: Request, res: Response) => {
-  try {
-    // const jenisBarangList: JenisBarang[] = jenisBarangs;
-    res.status(200).json(req.headers.authorization);
-  } catch (error) {
-    console.log(`Error: ${error}`);
-    res.status(500).json({ message: 'Internal Server Error' });
-  }
+// Connect to supabase DB
+// Create migration
+// Populate DB
+// Login api
+// Require auth middleware
+
+export const getAllItemType = (_req: Request, res: Response) => {
+  const result = read();
+  res.status(result.status).json({
+    message: result.message,
+    payload: result.payload,
+  });
 };
 
-export const createItemType = (req: Request, res: Response) => {
-  const validationError = validationResult(req);
-
-  if (!validationError.isEmpty()) {
-    res.status(400).json({ errors: validationError.array() });
-    return;
+export const createItemType = async (req: Request, res: Response) => {
+  try {
+    const validatedRequest: CreateItemTypeDTO = itemTypeSchema.parse(req.body);
+    const result = await create(validatedRequest);
+    res
+      .status(result.status)
+      .json({ message: result.message, payload: result.payload });
+  } catch (error) {
+    res.status(400).json({ message: 'Request validation error', error: error });
   }
-
-  const jenisBarang: ItemTypeModel = {
-    id: `id${itemTypes.length + 1}`,
-    name: req.body.name,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  };
-
-  itemTypes.push(jenisBarang);
-  res.status(201).json(itemTypes);
 };
 
 export const updateItemType = (req: Request, res: Response) => {

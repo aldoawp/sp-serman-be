@@ -1,4 +1,3 @@
 export interface CreateItemTypeDTO {
-  id: string,
-  name: string,
+  name: string;
 }

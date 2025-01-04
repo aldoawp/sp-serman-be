@@ -1,4 +1,4 @@
-export interface CreateItemTypeDTO {
+export interface GetItemTypeDTO {
   id: string,
   name: string,
 }
