@@ -3,23 +3,8 @@ import { CreateItemTypeDTO } from '../dtos/itemType/CreateItemTypeDTO';
 import { ItemTypeModel } from '../models/itemTypeModel';
 import { GetItemTypeDTO } from '../dtos/itemType/GetItemTypeDTO';
 import { prisma } from '../app';
-
-// Simulate DB
-const currentDate = new Date();
-export let itemTypes: ItemTypeModel[] = [
-  {
-    id: 'id1',
-    name: 'Aldo Arista',
-    created_at: currentDate,
-    updated_at: currentDate,
-  },
-  {
-    id: 'id2',
-    name: 'Budi Santoso',
-    created_at: currentDate,
-    updated_at: currentDate,
-  },
-];
+import { DeleteItemTypeDTO } from '../dtos/itemType/DeleteItemTypeDTO';
+import { UpdateItemTypeDTO } from '../dtos/itemType/UpdateItemTypeDTO';
 
 const apiResponse = (
   statusCode: number,
@@ -31,9 +16,30 @@ const apiResponse = (
   payload: payload,
 });
 
-export const create = async (data: CreateItemTypeDTO) => {
+export const read = async (): Promise<ApiResponse<GetItemTypeDTO>> => {
   try {
-    const itemTypeData = await prisma.itemType.create({
+    const itemTypesList: GetItemTypeDTO[] = await prisma.itemType.findMany({
+      select: {
+        id: true,
+        name: true,
+      },
+    });
+
+    if (itemTypesList.length !== 0) {
+      return apiResponse(200, 'Successfuly read all item types', itemTypesList);
+    } else {
+      return apiResponse(204, 'The list is empty', itemTypesList);
+    }
+  } catch (error) {
+    return apiResponse(500, 'Failed to create item type.', error);
+  }
+};
+
+export const create = async (
+  data: CreateItemTypeDTO
+): Promise<ApiResponse<ItemTypeModel>> => {
+  try {
+    const itemTypeData: ItemTypeModel = await prisma.itemType.create({
       data: {
         name: data.name,
       },
@@ -41,7 +47,7 @@ export const create = async (data: CreateItemTypeDTO) => {
 
     return apiResponse(201, 'New item type successfuly created', {
       id: itemTypeData.id,
-      name: data.name,
+      name: itemTypeData.name,
       created_at: itemTypeData.created_at,
       updated_at: itemTypeData.updated_at,
     });
@@ -50,13 +56,49 @@ export const create = async (data: CreateItemTypeDTO) => {
   }
 };
 
-export const read = () => {
+export const remove = async (
+  id: number
+): Promise<ApiResponse<DeleteItemTypeDTO>> => {
   try {
-    const allItemTypes: GetItemTypeDTO[] = itemTypes.map((val) => {
-      return { id: val.id, name: val.name };
+    const itemTypeData = await prisma.itemType.delete({
+      where: {
+        id: id,
+      },
     });
-    return apiResponse(200, 'Successfuly read all item types', allItemTypes);
+
+    const response: DeleteItemTypeDTO = {
+      id: itemTypeData.id,
+      name: itemTypeData.name,
+    };
+
+    return apiResponse(200, 'Item successfuly deleted', response);
   } catch (error) {
-    return apiResponse(500, 'Failed to create item type.', error);
+    return apiResponse(500, 'Failed to delete item type', error);
+  }
+};
+
+export const update = async (
+  data: UpdateItemTypeDTO
+): Promise<ApiResponse<UpdateItemTypeDTO>> => {
+  try {
+    const result: ItemTypeModel = await prisma.itemType.update({
+      where: {
+        id: data.id,
+      },
+      data: {
+        name: data.name,
+        updated_at: new Date(),
+      },
+    });
+
+    const response: UpdateItemTypeDTO = {
+      id: result.id,
+      name: result.name,
+      updatedAt: result.updated_at,
+    };
+
+    return apiResponse(200, 'Update item successful', response);
+  } catch (error) {
+    return apiResponse(500, 'Failed to update item type', error);
   }
 };
