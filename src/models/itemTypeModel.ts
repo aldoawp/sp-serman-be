@@ -1,6 +1,6 @@
 export interface ItemTypeModel {
-  id: string;
+  id: number;
   name: string;
-  createdAt: string;
-  updatedAt: string;
+  created_at: Date;
+  updated_at: Date;
 }

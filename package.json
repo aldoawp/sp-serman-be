@@ -6,6 +6,8 @@
     "build": "tsc --build",
     "start": "node ./dist/index.js",
     "dev": "nodemon ./src/server.ts",
+    "migrate": "prisma migrate dev",
+    "prisma:update": "prisma generate",
     "test": "echo \"Test successful!\" "
   },
   "keywords": [],
@@ -13,13 +15,14 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@prisma/client": "^6.1.0",
+    "@supabase/supabase-js": "^2.47.10",
     "express": "^4.21.2",
-    "express-validator": "^7.2.1",
-    "prisma": "^6.1.0"
+    "prisma": "^6.1.0",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
-    "@types/express-validator": "^2.20.33",
     "dotenv": "^16.4.7",
     "nodemon": "^3.1.9",
     "prettier": "^3.4.2",
