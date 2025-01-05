@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { create, read, remove, update } from '../services/itemTypeService';
+import { create, readAll, remove, update } from '../services/itemTypeService';
 import { CreateItemTypeDTO } from '../dtos/itemType/CreateItemTypeDTO';
 import { itemTypeSchema } from '../utils/validations/itemTypeValidation';
 import { DeleteItemTypeDTO } from '../dtos/itemType/DeleteItemTypeDTO';
@@ -10,7 +10,7 @@ import { UpdateItemTypeDTO } from '../dtos/itemType/UpdateItemTypeDTO';
 // Require auth middleware
 
 export const getAllItemType = async (_req: Request, res: Response) => {
-  const result = await read();
+  const result = await readAll();
   res.status(result.status).json({
     message: result.message,
     payload: result.payload,

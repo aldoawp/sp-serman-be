@@ -2,21 +2,12 @@ import { ApiResponse } from '../types/ApiResponse';
 import { CreateItemTypeDTO } from '../dtos/itemType/CreateItemTypeDTO';
 import { ItemTypeModel } from '../models/itemTypeModel';
 import { GetItemTypeDTO } from '../dtos/itemType/GetItemTypeDTO';
-import { prisma } from '../app';
+import prisma from '../config/prismaConfig';
 import { DeleteItemTypeDTO } from '../dtos/itemType/DeleteItemTypeDTO';
 import { UpdateItemTypeDTO } from '../dtos/itemType/UpdateItemTypeDTO';
+import { apiResponse } from '../utils/helpers';
 
-const apiResponse = (
-  statusCode: number,
-  message: string,
-  payload: unknown
-): ApiResponse<any> => ({
-  status: statusCode,
-  message: message,
-  payload: payload,
-});
-
-export const read = async (): Promise<ApiResponse<GetItemTypeDTO>> => {
+export const readAll = async (): Promise<ApiResponse<GetItemTypeDTO>> => {
   try {
     const itemTypesList: GetItemTypeDTO[] = await prisma.itemType.findMany({
       select: {
@@ -97,7 +88,7 @@ export const update = async (
       updatedAt: result.updated_at,
     };
 
-    return apiResponse(200, 'Update item successful', response);
+    return apiResponse(200, 'Update item type successful', response);
   } catch (error) {
     return apiResponse(500, 'Failed to update item type', error);
   }
