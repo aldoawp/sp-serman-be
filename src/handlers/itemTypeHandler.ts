@@ -5,7 +5,7 @@ import { itemTypeSchema } from '../utils/validations/itemTypeValidation';
 import { DeleteItemTypeDTO } from '../dtos/itemType/DeleteItemTypeDTO';
 import { ApiResponse } from '../types/ApiResponse';
 import { UpdateItemTypeDTO } from '../dtos/itemType/UpdateItemTypeDTO';
-import { redisClient } from '../config/redisConfig';
+import redisClient from '../config/redisConfig';
 
 // Login api
 // Require auth middleware
@@ -15,10 +15,10 @@ export const getAllItemType = async (_req: Request, res: Response) => {
     const cacheKey = 'allItemTypes';
     const cachedData = await redisClient.get(cacheKey);
     if (cachedData) {
-      console.log('All item types CACHE HIT');
+      console.log('CACHE HIT: get all item types');
       res.status(200).json({
         message: 'Successfuly get all item types',
-        payload: cachedData,
+        payload: JSON.parse(cachedData),
       });
       return;
     }

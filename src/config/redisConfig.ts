@@ -1,6 +1,6 @@
 import { createClient } from 'redis';
 
-export const redisClient = createClient();
+const redisClient = createClient();
 
 redisClient.on('error', (err) => console.log('Redis Client Error: ', err));
 
@@ -9,3 +9,5 @@ const initRedis = async () => {
 };
 
 initRedis();
+
+export default redisClient;
