@@ -2,7 +2,7 @@ import { ApiResponse } from '../types/ApiResponse';
 import { CreateItemTypeDTO } from '../dtos/itemType/CreateItemTypeDTO';
 import { ItemTypeModel } from '../models/itemTypeModel';
 import { GetItemTypeDTO } from '../dtos/itemType/GetItemTypeDTO';
-import { prisma } from '../app';
+import prisma from '../config/prismaConfig';
 import { DeleteItemTypeDTO } from '../dtos/itemType/DeleteItemTypeDTO';
 import { UpdateItemTypeDTO } from '../dtos/itemType/UpdateItemTypeDTO';
 import { apiResponse } from '../utils/helpers';

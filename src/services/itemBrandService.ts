@@ -1,4 +1,4 @@
-import { prisma } from '../app';
+import prisma from '../config/prismaConfig';
 import { GetItemBrandDTO } from '../dtos/itemBrand/GetItemBrandDTO';
 import { ApiResponse } from '../types/ApiResponse';
 import { apiResponse } from '../utils/helpers';
