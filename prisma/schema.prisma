@@ -20,3 +20,10 @@ model ItemType {
   created_at  DateTime  @default(now())
   updated_at  DateTime  @default(now())
 }
+
+model ItemBrand {
+  id          Int       @id @default(autoincrement())
+  name        String    
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @default(now())
+}
