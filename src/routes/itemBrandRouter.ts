@@ -1,16 +1,16 @@
 import { Router } from 'express';
 import {
-  // createItemBrand,
-  // deleteItemBrand,
+  createItemBrand,
+  deleteItemBrand,
   getAllItemBrand,
-  // updateItemBrand,
+  updateItemBrand,
 } from '../handlers/itemBrandHandler';
 
 const router = Router();
 
 router.get('/', getAllItemBrand);
-// router.post('/', createItemBrand);
-// router.put('/:id', updateItemBrand);
-// router.delete('/:id', deleteItemBrand);
+router.post('/', createItemBrand);
+router.put('/:id', updateItemBrand);
+router.delete('/:id', deleteItemBrand);
 
 export default router;

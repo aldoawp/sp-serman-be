@@ -1,5 +1,5 @@
 export interface CreateItemBrandDTO {
-  id: number;
+  id?: number;
   name: string;
-  createdAt: Date;
+  createdAt?: Date;
 }

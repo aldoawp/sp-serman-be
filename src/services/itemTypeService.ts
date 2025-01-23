@@ -1,11 +1,12 @@
 import { ApiResponse } from '../types/ApiResponse';
 import { CreateItemTypeDTO } from '../dtos/itemType/CreateItemTypeDTO';
-import { ItemTypeModel } from '../models/itemTypeModel';
+import ItemTypeModel from '../models/itemTypeModel';
 import { GetItemTypeDTO } from '../dtos/itemType/GetItemTypeDTO';
 import prisma from '../config/prismaConfig';
 import { DeleteItemTypeDTO } from '../dtos/itemType/DeleteItemTypeDTO';
 import { UpdateItemTypeDTO } from '../dtos/itemType/UpdateItemTypeDTO';
 import { apiResponse } from '../utils/helpers';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 
 export const readAll = async (): Promise<ApiResponse<GetItemTypeDTO>> => {
   try {
@@ -64,6 +65,12 @@ export const remove = async (
 
     return apiResponse(200, 'Item successfuly deleted', response);
   } catch (error) {
+    console.error('Error on removing item brand: ', error);
+
+    if (error instanceof PrismaClientKnownRequestError) {
+      return apiResponse(404, 'Item type not found', error);
+    }
+
     return apiResponse(500, 'Failed to delete item type', error);
   }
 };
@@ -90,6 +97,12 @@ export const update = async (
 
     return apiResponse(200, 'Update item type successful', response);
   } catch (error) {
+    console.error('Error on updating item type: ', error);
+
+    if (error instanceof PrismaClientKnownRequestError) {
+      return apiResponse(404, 'Item type not found', error);
+    }
+
     return apiResponse(500, 'Failed to update item type', error);
   }
 };

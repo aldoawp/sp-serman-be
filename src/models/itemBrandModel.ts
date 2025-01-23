@@ -1,4 +1,4 @@
-export default interface ItemTypeModel {
+export default interface ItemBrandModel {
   id: number;
   name: string;
   created_at: Date;

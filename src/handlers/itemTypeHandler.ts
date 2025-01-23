@@ -5,16 +5,45 @@ import { itemTypeSchema } from '../utils/validations/itemTypeValidation';
 import { DeleteItemTypeDTO } from '../dtos/itemType/DeleteItemTypeDTO';
 import { ApiResponse } from '../types/ApiResponse';
 import { UpdateItemTypeDTO } from '../dtos/itemType/UpdateItemTypeDTO';
+import redisClient from '../config/redisConfig';
 
 // Login api
 // Require auth middleware
 
 export const getAllItemType = async (_req: Request, res: Response) => {
-  const result = await readAll();
-  res.status(result.status).json({
-    message: result.message,
-    payload: result.payload,
-  });
+  try {
+    const cacheKey = 'allItemTypes';
+    const cachedData = await redisClient.get(cacheKey);
+    if (cachedData) {
+      console.log('CACHE HIT: get all item types');
+      res.status(200).json({
+        message: 'Successfuly get all item types',
+        payload: JSON.parse(cachedData),
+      });
+      return;
+    }
+
+    const result = await readAll();
+    if (result.status != 200) {
+      res
+        .status(result.status)
+        .json({ message: result.message, payload: result.payload });
+      return;
+    }
+
+    await redisClient.set(cacheKey, JSON.stringify(result.payload), {
+      EX: 86400,
+    });
+
+    res.status(result.status).json({
+      message: result.message,
+      payload: result.payload,
+    });
+    return;
+  } catch (error) {
+    console.error('Error getting all item types: ', error);
+    res.status(500).json({ message: 'Internal server error', payload: error });
+  }
 };
 
 export const createItemType = async (req: Request, res: Response) => {
@@ -24,8 +53,11 @@ export const createItemType = async (req: Request, res: Response) => {
     res
       .status(result.status)
       .json({ message: result.message, payload: result.payload });
+    return;
   } catch (error) {
+    console.error('Request validation error: ', error);
     res.status(400).json({ message: 'Request validation error', error: error });
+    return;
   }
 };
 
@@ -45,10 +77,12 @@ export const updateItemType = async (req: Request, res: Response) => {
       message: result.message,
       payload: result.payload,
     });
+    return;
   } catch (error) {
     res
       .status(400)
       .json({ message: 'Request validation error', payload: error });
+    return;
   }
 };
 
@@ -60,4 +94,5 @@ export const deleteItemType = async (req: Request, res: Response) => {
     message: result.message,
     payload: result.payload,
   });
+  return;
 };
