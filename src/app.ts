@@ -13,5 +13,6 @@ app.use(cors(corsOption));
 
 app.use('/api/v1/item-type', itemTypeRouter);
 app.use('/api/v1/item-brand', itemBrandRouter);
+app.use('/api/v1/auth', )
 
 export default app;
