@@ -1,5 +1,5 @@
 export interface UpdateItemBrandDTO {
-  id: number;
+  id?: number;
   name: string;
-  updatedAt: Date;
+  updatedAt?: Date;
 }

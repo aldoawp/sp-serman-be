@@ -53,8 +53,11 @@ export const createItemType = async (req: Request, res: Response) => {
     res
       .status(result.status)
       .json({ message: result.message, payload: result.payload });
+    return;
   } catch (error) {
+    console.error('Request validation error: ', error);
     res.status(400).json({ message: 'Request validation error', error: error });
+    return;
   }
 };
 
@@ -74,10 +77,12 @@ export const updateItemType = async (req: Request, res: Response) => {
       message: result.message,
       payload: result.payload,
     });
+    return;
   } catch (error) {
     res
       .status(400)
       .json({ message: 'Request validation error', payload: error });
+    return;
   }
 };
 
@@ -89,4 +94,5 @@ export const deleteItemType = async (req: Request, res: Response) => {
     message: result.message,
     payload: result.payload,
   });
+  return;
 };
