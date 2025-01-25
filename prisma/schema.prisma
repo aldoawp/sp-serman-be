@@ -28,4 +28,11 @@ model ItemBrand {
   updated_at  DateTime  @default(now())
 }
 
-
+model Users {
+  id          Int       @id @default(autoincrement())
+  username    String    @unique
+  password    String
+  email       String
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @default(now())
+}
